@@ -1,6 +1,6 @@
 const T = {
     pl: {
-'hero.badge':      'Otwarty na nowe możliwości',
+        'hero.badge':      'Otwarty na współpracę',
         'hero.headline1':  'Twórczy umysł,',
         'hero.headline2':  'praktyczne rozwiązania',
         'hero.sub':        'Skupiony na prostocie, jakości i sensownej pracy.',
@@ -19,7 +19,7 @@ const T = {
         'overlay.btn':     'Odwiedź projekt →',
     },
     en: {
-'hero.badge':      'Available for new opportunities',
+        'hero.badge':      'Available for collaboration',
         'hero.headline1':  'Creative Thinker',
         'hero.headline2':  '& Problem Solver',
         'hero.sub':        'Focused on simplicity, quality, and meaningful work.',
