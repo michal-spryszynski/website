@@ -1,0 +1,81 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for sensitive files
+        run: |
+          FORBIDDEN=$(find . -type f \( \
+            -name ".env" -o \
+            -name ".env.*" -o \
+            -name "*.pem" -o \
+            -name "*.key" -o \
+            -name "id_rsa" -o \
+            -name "id_ed25519" \
+          \) -not -path "./.git/*")
+          if [ -n "$FORBIDDEN" ]; then
+            echo "❌ Sensitive files found:"
+            echo "$FORBIDDEN"
+            exit 1
+          fi
+          echo "✅ No sensitive files"
+
+      - name: Check for unwanted file types
+        run: |
+          UNWANTED=$(find . -type f \( \
+            -name "*.exe" -o \
+            -name "*.zip" -o \
+            -name "*.tar.gz" -o \
+            -name "*.dll" \
+          \) -not -path "./.git/*")
+          if [ -n "$UNWANTED" ]; then
+            echo "❌ Unwanted binary files found:"
+            echo "$UNWANTED"
+            exit 1
+          fi
+          echo "✅ No unwanted binaries"
+
+      - name: Check individual file size
+        run: |
+          LARGE=$(find . -type f -not -path "./.git/*" -size +500k)
+          if [ -n "$LARGE" ]; then
+            echo "❌ Files over 500KB found:"
+            echo "$LARGE"
+            exit 1
+          fi
+          echo "✅ All files under 500KB"
+
+      - name: Check total repo size
+        run: |
+          SIZE=$(du -sm --exclude=.git . | cut -f1)
+          echo "Repo size: ${SIZE}MB"
+          if [ "$SIZE" -gt 10 ]; then
+            echo "❌ Repo exceeds 10MB (${SIZE}MB)"
+            exit 1
+          fi
+          echo "✅ Repo size OK"
+
+      - name: Validate HTML
+        run: |
+          sudo apt-get install -y tidy > /dev/null 2>&1
+          ERRORS=0
+          for f in $(find . -name "*.html" -not -path "./.git/*"); do
+            tidy -errors -quiet "$f" 2>&1 && true
+            if [ $? -eq 2 ]; then
+              echo "❌ HTML errors in $f"
+              ERRORS=$((ERRORS+1))
+            fi
+          done
+          if [ "$ERRORS" -gt 0 ]; then
+            exit 1
+          fi
+          echo "✅ HTML valid"
