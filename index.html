@@ -304,9 +304,16 @@
             step();
             draw();
         }
+        let _lastWidth = window.innerWidth;
+        window.addEventListener('resize', () => {
+            if (window.innerWidth !== _lastWidth) {
+                _lastWidth = window.innerWidth;
+                init(); draw();
+            }
+        });
+
         init();
         requestAnimationFrame(loop);
-        window.addEventListener('resize', init);
     })();
     </script>
 
