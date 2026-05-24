@@ -10,6 +10,14 @@
     <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
     <link rel="manifest" href="icon/site.webmanifest">
     <link rel="stylesheet" href="style.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "./js/three.module.js",
+            "three/addons/": "./js/"
+        }
+    }
+    </script>
 </head>
 <body>
     <canvas id="gol-canvas"></canvas>
@@ -85,6 +93,26 @@
                         </span>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section id="schematic">
+            <div class="container">
+                <div class="section-header">
+                    <h2 data-i18n="schematic.heading"></h2>
+                    <p  data-i18n="schematic.sub"></p>
+                </div>
+                
+                <div id="three-container">
+                    <div id="three-loading">
+                        <div id="loading-text">Loading 3D Models...</div>
+                        <div id="loading-bar-container" style="width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 10px; overflow: hidden; display: block;">
+                            <div id="loading-bar" style="width: 0%; height: 100%; background: var(--accent-color); transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="scene-hint" data-i18n="schematic.hint"></p>
             </div>
         </section>
 
@@ -356,6 +384,133 @@
         init();
         if (reduced) { draw(); } else { requestAnimationFrame(loop); }
     })();
+    </script>
+    <script type="module">
+    import * as THREE from 'three';
+    import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    async function init() {
+        const container = document.getElementById('three-container');
+        const loading   = document.getElementById('three-loading');
+        const loadingText = document.getElementById('loading-text');
+        const loadingBar  = document.getElementById('loading-bar');
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 10000);
+        camera.position.set(200, 150, 300);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 2;
+
+        // Enhanced lighting attached to camera (headlamp effect)
+        scene.add(new THREE.AmbientLight(0xffffff, 0.8)); // Reduced ambient for better shadows
+        
+        const mainLight = new THREE.DirectionalLight(0xffffff, 3.0);
+        mainLight.position.set(1, 1, 2);
+        camera.add(mainLight);
+        camera.add(mainLight.target);
+
+        const fillLight = new THREE.DirectionalLight(0x8b5cf6, 1.5); // Slightly dimmer fill
+        fillLight.position.set(-1, 0.5, 2);
+        camera.add(fillLight);
+        camera.add(fillLight.target);
+
+        scene.add(camera);
+
+        const loader = new OBJLoader();
+        const material = new THREE.MeshStandardMaterial({ 
+            color: 0xe5e7eb, // Light grey (Tailwind gray-200) for better contrast than pure white
+            roughness: 0.3, 
+            metalness: 0.2 
+        });
+
+        try {
+            console.log('Starting to load model: models/esp32_v2.obj');
+            const model = await new Promise((resolve, reject) => {
+                loader.load(
+                    'models/esp32_v2.obj',
+                    (obj) => {
+                        console.log('Model loaded successfully:', obj);
+                        resolve(obj);
+                    },
+                    (xhr) => {
+                        if (xhr.lengthComputable) {
+                            const percent = (xhr.loaded / xhr.total) * 100;
+                            loadingBar.style.width = percent + '%';
+                            loadingText.textContent = `Loading Model: ${Math.round(percent)}%`;
+                        } else {
+                            loadingText.textContent = `Loading... (${(xhr.loaded / 1024 / 1024).toFixed(2)} MB)`;
+                        }
+                    },
+                    (error) => {
+                        console.error('Loader error callback:', error);
+                        reject(error);
+                    }
+                );
+            });
+
+            // Apply material first
+            model.traverse(child => {
+                if (child.isMesh) {
+                    child.material = material;
+                }
+            });
+
+            // Precise Centering
+            const box = new THREE.Box3().setFromObject(model);
+            const center = new THREE.Vector3();
+            box.getCenter(center);
+            
+            // Move the geometry so its center is at (0,0,0)
+            model.position.x = -center.x;
+            model.position.y = -center.y;
+            model.position.z = -center.z;
+            
+            // Wrap in a group to maintain 0,0,0 as the rotation pivot
+            const pivot = new THREE.Group();
+            pivot.add(model);
+            scene.add(pivot);
+
+            const size = new THREE.Vector3();
+            box.getSize(size);
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const scale = 250 / maxDim;
+            pivot.scale.set(scale, scale, scale);
+            
+            controls.target.set(0, 0, 0);
+            controls.update();
+
+            loading.style.opacity = '0';
+            setTimeout(() => loading.style.display = 'none', 500);
+
+        } catch (e) {
+            console.error('3D Loading Error:', e);
+            loadingText.textContent = 'Failed to load model.';
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+    }
+
+    init().catch(console.error);
     </script>
 </body>
 </html>
