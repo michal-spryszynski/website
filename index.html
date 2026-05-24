@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <canvas id="gol-canvas"></canvas>
     <header>
         <div class="container">
             <div class="logo">Michał Spryszyński</div>
@@ -209,6 +210,74 @@
 
         // ── Init ─────────────────────────────────────────────────────────────
         applyLang(getLang());
+    </script>
+
+    <script>
+    // ── Game of Life background ───────────────────────────────────────────────
+    (function () {
+        const canvas = document.getElementById('gol-canvas');
+        const ctx    = canvas.getContext('2d');
+        const CELL   = 8;   // pixel size of each cell
+        const FPS    = 10;  // simulation speed
+        let cols, rows, grid;
+
+        function init() {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+            cols = Math.ceil(canvas.width  / CELL);
+            rows = Math.ceil(canvas.height / CELL);
+            grid = new Uint8Array(cols * rows);
+            for (let i = 0; i < grid.length; i++) {
+                grid[i] = Math.random() < 0.18 ? 1 : 0;
+            }
+        }
+
+        function step() {
+            const next = new Uint8Array(cols * rows);
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    let n = 0;
+                    for (let dr = -1; dr <= 1; dr++) {
+                        for (let dc = -1; dc <= 1; dc++) {
+                            if (dr === 0 && dc === 0) continue;
+                            n += grid[((r + dr + rows) % rows) * cols + ((c + dc + cols) % cols)];
+                        }
+                    }
+                    const alive = grid[r * cols + c];
+                    next[r * cols + c] = alive ? (n === 2 || n === 3 ? 1 : 0) : (n === 3 ? 1 : 0);
+                }
+            }
+            grid = next;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(139, 92, 246, 0.18)';
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    if (grid[r * cols + c]) {
+                        ctx.fillRect(c * CELL, r * CELL, CELL - 1, CELL - 1);
+                    }
+                }
+            }
+        }
+
+        // Respect reduced-motion: show static snapshot, skip animation
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        let lastTime = 0;
+        function loop(ts) {
+            requestAnimationFrame(loop);
+            if (ts - lastTime < 1000 / FPS) return;
+            lastTime = ts;
+            step();
+            draw();
+        }
+
+        window.addEventListener('resize', () => { init(); draw(); });
+        init();
+        if (reduced) { draw(); } else { requestAnimationFrame(loop); }
+    })();
     </script>
 </body>
 </html>
