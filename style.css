@@ -202,6 +202,37 @@ header .container {
     gap: 0.5rem;
 }
 
+/* Magical hover buttons */
+.btn-magic {
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+    transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.btn-magic::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6, #a78bfa);
+    background-size: 200% 200%;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+}
+
+.btn-magic:hover::before {
+    opacity: 1;
+}
+
+.btn-magic:hover {
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(139, 92, 246, 0.35),
+                0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
 /* Sections */
 main section {
     padding: 6rem 0;
