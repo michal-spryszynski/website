@@ -127,10 +127,15 @@ nav a:hover {
     font-weight: 800;
     line-height: 1.1;
     letter-spacing: -0.05em;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.25rem;
+    padding-bottom: 0.15em;
     background: linear-gradient(to bottom, #fff, #9ca3af);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+#hero h1 span {
+    display: block;
 }
 
 #hero p {
