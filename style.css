@@ -24,6 +24,7 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: clip;
 }
 
 body {
@@ -62,9 +63,7 @@ header .container {
     font-size: 1.25rem;
     font-weight: 700;
     letter-spacing: -0.025em;
-    background: linear-gradient(to right, #a78bfa, #8b5cf6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--primary-text);
 }
 
 #lang-toggle {
@@ -92,7 +91,6 @@ header .container {
     padding: 8rem 0;
     text-align: center;
     position: relative;
-    overflow: hidden;
 }
 
 #hero .container {
@@ -120,14 +118,6 @@ header .container {
     animation: orb-pulse 10s ease-in-out infinite;
 }
 
-#hero::after {
-    width: 380px;
-    height: 380px;
-    background: radial-gradient(circle, rgba(167, 139, 250, 0.14) 0%, transparent 65%);
-    bottom: -60px;
-    right: -80px;
-    animation: orb-drift 16s ease-in-out infinite reverse;
-}
 
 .badge {
     display: inline-block;
@@ -475,8 +465,9 @@ main section {
 
 /* Footer */
 footer {
-    padding: 4rem 0;
+    padding: 1.25rem 0;
     border-top: 1px solid var(--border-color);
+    background: var(--bg-color);
     text-align: center;
     color: var(--secondary-text);
     font-size: 0.875rem;
@@ -494,16 +485,10 @@ footer {
     50%       { transform: translateX(-50%) scale(1.18); opacity: 0.75; }
 }
 
-@keyframes orb-drift {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33%       { transform: translate(-30px, 20px) scale(1.08); }
-    66%       { transform: translate(20px, -15px) scale(0.94); }
-}
-
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
     #hero h1 { animation: none; background-position: 0% 50%; }
-    #hero::before, #hero::after { animation: none; }
+    #hero::before { animation: none; }
 }
 
 /* Responsive */
