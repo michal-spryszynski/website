@@ -15,28 +15,21 @@
     <header>
         <div class="container">
             <div class="logo">Michał Spryszyński</div>
-            <nav>
-                <ul>
-                    <li><a href="#projects" data-i18n="nav.work"></a></li>
-                    <li><a href="#about"    data-i18n="nav.about"></a></li>
-                    <li><a href="#contact"  data-i18n="nav.contact"></a></li>
-                </ul>
-                <button id="lang-toggle" aria-label="Switch language"></button>
-            </nav>
+            <span id="lang-toggle" role="button" tabindex="0" aria-label="Switch language"></span>
         </div>
     </header>
 
     <main>
         <section id="hero">
             <div class="container">
-                <span class="badge" data-i18n="hero.badge"></span>
                 <h1>
                     <span data-i18n="hero.headline1"></span>
                     <span data-i18n="hero.headline2"></span>
                 </h1>
+                <span class="badge" data-i18n="hero.badge"></span>
                 <p data-i18n="hero.sub"></p>
                 <div class="hero-actions">
-                    <a href="#projects" class="btn"         data-i18n="hero.cta.work"></a>
+                    <a href="#projects" class="btn"             data-i18n="hero.cta.work"></a>
                     <a href="#contact"  class="btn btn-outline" data-i18n="hero.cta.contact"></a>
                 </div>
             </div>
@@ -83,26 +76,10 @@
 
         <section id="about">
             <div class="container">
-                <div class="about-grid">
-                    <div class="about-text">
-                        <h2 data-i18n="about.heading"></h2>
-                        <p  data-i18n="about.p1"></p>
-                        <p  data-i18n="about.p2"></p>
-                    </div>
-                    <div class="about-values">
-                        <div class="value-item">
-                            <h4 data-i18n="about.v1.title"></h4>
-                            <p  data-i18n="about.v1.desc"></p>
-                        </div>
-                        <div class="value-item">
-                            <h4 data-i18n="about.v2.title"></h4>
-                            <p  data-i18n="about.v2.desc"></p>
-                        </div>
-                        <div class="value-item">
-                            <h4 data-i18n="about.v3.title"></h4>
-                            <p  data-i18n="about.v3.desc"></p>
-                        </div>
-                    </div>
+                <div class="about-text">
+                    <h2 data-i18n="about.heading"></h2>
+                    <p  data-i18n="about.p1"></p>
+                    <p  data-i18n="about.p2"></p>
                 </div>
             </div>
         </section>
@@ -167,8 +144,9 @@
                 card.querySelector('.card-short').textContent = card.dataset[`short${lang.charAt(0).toUpperCase() + lang.slice(1)}`];
             });
 
-            // Toggle button label
-            document.getElementById('lang-toggle').textContent = lang === 'pl' ? 'EN' : 'PL';
+            // Toggle — highlight active language
+            document.getElementById('lang-toggle').innerHTML =
+                lang === 'pl' ? '<em>PL</em> / EN' : 'PL / <em>EN</em>';
 
             // html[lang] attribute
             document.documentElement.lang = lang;
@@ -222,9 +200,11 @@
         oClose.addEventListener('click', closeProject);
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProject(); });
 
-        // ── Toggle button ────────────────────────────────────────────────────
-        document.getElementById('lang-toggle').addEventListener('click', () => {
-            setLang(getLang() === 'pl' ? 'en' : 'pl');
+        // ── Toggle ───────────────────────────────────────────────────────────
+        const toggle = document.getElementById('lang-toggle');
+        toggle.addEventListener('click', () => setLang(getLang() === 'pl' ? 'en' : 'pl'));
+        toggle.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
         });
 
         // ── Init ─────────────────────────────────────────────────────────────
