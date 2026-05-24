@@ -215,6 +215,8 @@
     <script>
     // ── Game of Life background ───────────────────────────────────────────────
     (function () {
+        const SCROLL_WITH_PAGE = true; // false = stays fixed in viewport
+
         const canvas = document.getElementById('gol-canvas');
         const ctx    = canvas.getContext('2d');
         const CELL   = 8;   // pixel size of each cell
@@ -222,8 +224,11 @@
         let cols, rows, grid;
 
         function init() {
+            canvas.style.position = SCROLL_WITH_PAGE ? 'absolute' : 'fixed';
             canvas.width  = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.height = SCROLL_WITH_PAGE
+                ? document.documentElement.scrollHeight
+                : window.innerHeight;
             cols = Math.ceil(canvas.width  / CELL);
             rows = Math.ceil(canvas.height / CELL);
             grid = new Uint8Array(cols * rows);
