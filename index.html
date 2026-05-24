@@ -352,7 +352,13 @@
             draw();
         }
 
-        window.addEventListener('resize', () => { init(); draw(); });
+        let _lastWidth = window.innerWidth;
+        window.addEventListener('resize', () => {
+            if (window.innerWidth !== _lastWidth) {
+                _lastWidth = window.innerWidth;
+                init(); draw();
+            }
+        });
         init();
         if (reduced) { draw(); } else { requestAnimationFrame(loop); }
     })();
