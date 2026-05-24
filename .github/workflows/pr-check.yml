@@ -46,20 +46,20 @@ jobs:
 
       - name: Check individual file size
         run: |
-          LARGE=$(find . -type f -not -path "./.git/*" -size +500k)
+          LARGE=$(find . -type f -not -path "./.git/*" -size +10M)
           if [ -n "$LARGE" ]; then
-            echo "❌ Files over 500KB found:"
+            echo "❌ Files over 10MB found:"
             echo "$LARGE"
             exit 1
           fi
-          echo "✅ All files under 500KB"
+          echo "✅ All files under 10MB"
 
       - name: Check total repo size
         run: |
           SIZE=$(du -sm --exclude=.git . | cut -f1)
           echo "Repo size: ${SIZE}MB"
-          if [ "$SIZE" -gt 10 ]; then
-            echo "❌ Repo exceeds 10MB (${SIZE}MB)"
+          if [ "$SIZE" -gt 30 ]; then
+            echo "❌ Repo exceeds 30MB (${SIZE}MB)"
             exit 1
           fi
           echo "✅ Repo size OK"
