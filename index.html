@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,10 +17,11 @@
             <div class="logo">Michał Spryszyński</div>
             <nav>
                 <ul>
-                    <li><a href="#projects">Work</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#projects" data-i18n="nav.work"></a></li>
+                    <li><a href="#about"    data-i18n="nav.about"></a></li>
+                    <li><a href="#contact"  data-i18n="nav.contact"></a></li>
                 </ul>
+                <button id="lang-toggle" aria-label="Switch language"></button>
             </nav>
         </div>
     </header>
@@ -28,12 +29,15 @@
     <main>
         <section id="hero">
             <div class="container">
-                <span class="badge">Available for new opportunities</span>
-                <h1>Creative Thinker & Problem Solver</h1>
-                <p>Focused on simplicity, quality, and meaningful work.</p>
+                <span class="badge" data-i18n="hero.badge"></span>
+                <h1>
+                    <span data-i18n="hero.headline1"></span>
+                    <span data-i18n="hero.headline2"></span>
+                </h1>
+                <p data-i18n="hero.sub"></p>
                 <div class="hero-actions">
-                    <a href="#projects" class="btn">View My Work</a>
-                    <a href="#contact" class="btn btn-outline">Get in Touch</a>
+                    <a href="#projects" class="btn"         data-i18n="hero.cta.work"></a>
+                    <a href="#contact"  class="btn btn-outline" data-i18n="hero.cta.contact"></a>
                 </div>
             </div>
         </section>
@@ -41,28 +45,36 @@
         <section id="projects">
             <div class="container">
                 <div class="section-header">
-                    <h2>Featured Work</h2>
-                    <p>A selection of projects I've been working on.</p>
+                    <h2 data-i18n="projects.heading"></h2>
+                    <p  data-i18n="projects.sub"></p>
                 </div>
                 <div class="project-grid">
                     <article class="project-card"
-                        data-title="Project Alpha"
-                        data-desc="Project Alpha dives deep into the intersection of human behaviour and digital product design. Over six months, we analysed workflow bottlenecks across three organisations and translated the findings into a modular design system that reduced task-completion time by 34%. The result is a clean, accessible toolkit teams can adopt incrementally without disrupting existing processes."
+                        data-title-pl="Projekt Alpha"
+                        data-title-en="Project Alpha"
+                        data-short-pl="Gruntowne studium efektywności i zasad projektowania zastosowanych w codziennych procesach pracy."
+                        data-short-en="A comprehensive study on efficiency and design principles applied to daily workflows."
+                        data-desc-pl="Projekt Alpha zagłębia się w punkt styku zachowań ludzkich i projektowania produktów cyfrowych. Przez sześć miesięcy analizowaliśmy wąskie gardła procesów w trzech organizacjach i przełożyliśmy wyniki na modułowy system projektowania, który skrócił czas realizacji zadań o 34%. Efektem jest przejrzysty zestaw narzędzi, który zespoły mogą wdrażać stopniowo, nie zakłócając istniejących procesów."
+                        data-desc-en="Project Alpha dives deep into the intersection of human behaviour and digital product design. Over six months, we analysed workflow bottlenecks across three organisations and translated the findings into a modular design system that reduced task-completion time by 34%. The result is a clean, accessible toolkit teams can adopt incrementally without disrupting existing processes."
                         data-url="https://example.com/alpha">
                         <div class="project-content">
-                            <h3>Project Alpha</h3>
-                            <p>A comprehensive study on efficiency and design principles applied to daily workflows.</p>
-                            <span class="card-hint">Click to explore &rarr;</span>
+                            <h3 class="card-title"></h3>
+                            <p  class="card-short"></p>
+                            <span class="card-hint" data-i18n="projects.hint"></span>
                         </div>
                     </article>
                     <article class="project-card"
-                        data-title="Project Beta"
-                        data-desc="Project Beta reimagines information architecture for data-heavy dashboards. By replacing conventional table-heavy layouts with progressive disclosure patterns and contextual micro-interactions, the redesigned interface cut cognitive load significantly. User testing showed a 48% improvement in key metric discovery time and a notable drop in support requests related to data interpretation."
+                        data-title-pl="Projekt Beta"
+                        data-title-en="Project Beta"
+                        data-short-pl="Poszukiwanie nowych sposobów organizowania i prezentowania informacji dla lepszej przejrzystości."
+                        data-short-en="Exploring new ways to organize and present information for better clarity."
+                        data-desc-pl="Projekt Beta na nowo definiuje architekturę informacji w dashboardach z dużą ilością danych. Zastąpienie konwencjonalnych układów opartych na tabelach wzorcami progresywnego ujawniania i kontekstowymi mikrointerakcjami znacząco zmniejszyło obciążenie poznawcze. Testy użytkowników wykazały 48% poprawę czasu odkrywania kluczowych wskaźników i wyraźny spadek zgłoszeń dotyczących interpretacji danych."
+                        data-desc-en="Project Beta reimagines information architecture for data-heavy dashboards. By replacing conventional table-heavy layouts with progressive disclosure patterns and contextual micro-interactions, the redesigned interface cut cognitive load significantly. User testing showed a 48% improvement in key metric discovery time and a notable drop in support requests related to data interpretation."
                         data-url="https://example.com/beta">
                         <div class="project-content">
-                            <h3>Project Beta</h3>
-                            <p>Exploring new ways to organize and present information for better clarity.</p>
-                            <span class="card-hint">Click to explore &rarr;</span>
+                            <h3 class="card-title"></h3>
+                            <p  class="card-short"></p>
+                            <span class="card-hint" data-i18n="projects.hint"></span>
                         </div>
                     </article>
                 </div>
@@ -73,22 +85,22 @@
             <div class="container">
                 <div class="about-grid">
                     <div class="about-text">
-                        <h2>About Me</h2>
-                        <p>Hi, I'm Michał. I'm passionate about creating things that are not only functional but also visually pleasing and easy to use.</p>
-                        <p>I value clear communication, attention to detail, and the beauty found in simple solutions. Whether it's a small task or a large project, I strive for excellence in everything I do.</p>
+                        <h2 data-i18n="about.heading"></h2>
+                        <p  data-i18n="about.p1"></p>
+                        <p  data-i18n="about.p2"></p>
                     </div>
                     <div class="about-values">
                         <div class="value-item">
-                            <h4>Quality</h4>
-                            <p>Doing it right the first time.</p>
+                            <h4 data-i18n="about.v1.title"></h4>
+                            <p  data-i18n="about.v1.desc"></p>
                         </div>
                         <div class="value-item">
-                            <h4>Simplicity</h4>
-                            <p>Less is often more.</p>
+                            <h4 data-i18n="about.v2.title"></h4>
+                            <p  data-i18n="about.v2.desc"></p>
                         </div>
                         <div class="value-item">
-                            <h4>Impact</h4>
-                            <p>Making a difference.</p>
+                            <h4 data-i18n="about.v3.title"></h4>
+                            <p  data-i18n="about.v3.desc"></p>
                         </div>
                     </div>
                 </div>
@@ -98,9 +110,9 @@
         <section id="contact">
             <div class="container">
                 <div class="contact-card">
-                    <h2>Let's connect</h2>
-                    <p>I'm always open to discussing new projects, creative ideas or opportunities to be part of your vision.</p>
-                    <a href="mailto:michalspryszynski1@wp.pl" class="btn">Send an Email</a>
+                    <h2 data-i18n="contact.heading"></h2>
+                    <p  data-i18n="contact.sub"></p>
+                    <a href="mailto:michalspryszynski1@wp.pl" class="btn" data-i18n="contact.cta"></a>
                     <div class="social-links">
                         <a href="https://github.com/michal-spryszynski" target="_blank" rel="noopener">GitHub</a>
                     </div>
@@ -113,10 +125,10 @@
     <div id="project-backdrop" aria-hidden="true"></div>
     <div id="project-overlay" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
         <button id="overlay-close" aria-label="Close">&times;</button>
-        <p id="overlay-label">Project</p>
+        <p id="overlay-label" data-i18n="overlay.label"></p>
         <h2 id="overlay-title"></h2>
         <p id="overlay-desc"></p>
-        <a id="overlay-btn" href="#" target="_blank" rel="noopener" class="btn btn-project">Visit Project &rarr;</a>
+        <a id="overlay-btn" href="#" target="_blank" rel="noopener" class="btn btn-project" data-i18n="overlay.btn"></a>
     </div>
 
     <footer>
@@ -125,7 +137,51 @@
         </div>
     </footer>
 
+    <script src="translations.js"></script>
     <script>
+        // ── Language helpers ────────────────────────────────────────────────
+        function getLang() {
+            const param = new URLSearchParams(window.location.search).get('lang');
+            return (param === 'en' || param === 'pl') ? param : 'pl';
+        }
+
+        function setLang(lang) {
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState({}, '', url);
+            applyLang(lang);
+        }
+
+        function applyLang(lang) {
+            const dict = T[lang];
+
+            // Static data-i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (dict[key] !== undefined) el.textContent = dict[key];
+            });
+
+            // Project cards — title & short description
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.querySelector('.card-title').textContent = card.dataset[`title${lang.charAt(0).toUpperCase() + lang.slice(1)}`];
+                card.querySelector('.card-short').textContent = card.dataset[`short${lang.charAt(0).toUpperCase() + lang.slice(1)}`];
+            });
+
+            // Toggle button label
+            document.getElementById('lang-toggle').textContent = lang === 'pl' ? 'EN' : 'PL';
+
+            // html[lang] attribute
+            document.documentElement.lang = lang;
+
+            // Keep overlay in sync if it's open
+            const overlay = document.getElementById('project-overlay');
+            if (overlay.classList.contains('visible') && overlay._card) {
+                document.getElementById('overlay-desc').textContent =
+                    overlay._card.dataset[`desc${lang.charAt(0).toUpperCase() + lang.slice(1)}`];
+            }
+        }
+
+        // ── Overlay ─────────────────────────────────────────────────────────
         const backdrop = document.getElementById('project-backdrop');
         const overlay  = document.getElementById('project-overlay');
         const oTitle   = document.getElementById('overlay-title');
@@ -134,9 +190,12 @@
         const oClose   = document.getElementById('overlay-close');
 
         function openProject(card) {
-            oTitle.textContent = card.dataset.title;
-            oDesc.textContent  = card.dataset.desc;
+            const lang = getLang();
+            const cap  = lang.charAt(0).toUpperCase() + lang.slice(1);
+            oTitle.textContent = card.dataset[`title${cap}`];
+            oDesc.textContent  = card.dataset[`desc${cap}`];
             oBtn.href          = card.dataset.url;
+            overlay._card      = card;
 
             backdrop.classList.add('visible');
             overlay.classList.add('visible');
@@ -150,7 +209,6 @@
             document.body.style.overflow = '';
         }
 
-        // Wire up cards
         document.querySelectorAll('.project-card').forEach(card => {
             card.addEventListener('click', () => openProject(card));
             card.addEventListener('keydown', e => {
@@ -163,6 +221,14 @@
         backdrop.addEventListener('click', closeProject);
         oClose.addEventListener('click', closeProject);
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProject(); });
+
+        // ── Toggle button ────────────────────────────────────────────────────
+        document.getElementById('lang-toggle').addEventListener('click', () => {
+            setLang(getLang() === 'pl' ? 'en' : 'pl');
+        });
+
+        // ── Init ─────────────────────────────────────────────────────────────
+        applyLang(getLang());
     </script>
 </body>
 </html>
