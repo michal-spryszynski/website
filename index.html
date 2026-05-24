@@ -45,18 +45,24 @@
                     <p>A selection of projects I've been working on.</p>
                 </div>
                 <div class="project-grid">
-                    <article class="project-card">
+                    <article class="project-card"
+                        data-title="Project Alpha"
+                        data-desc="Project Alpha dives deep into the intersection of human behaviour and digital product design. Over six months, we analysed workflow bottlenecks across three organisations and translated the findings into a modular design system that reduced task-completion time by 34%. The result is a clean, accessible toolkit teams can adopt incrementally without disrupting existing processes."
+                        data-url="https://example.com/alpha">
                         <div class="project-content">
                             <h3>Project Alpha</h3>
                             <p>A comprehensive study on efficiency and design principles applied to daily workflows.</p>
-                            <a href="#" class="link">View Case Study &rarr;</a>
+                            <span class="card-hint">Click to explore &rarr;</span>
                         </div>
                     </article>
-                    <article class="project-card">
+                    <article class="project-card"
+                        data-title="Project Beta"
+                        data-desc="Project Beta reimagines information architecture for data-heavy dashboards. By replacing conventional table-heavy layouts with progressive disclosure patterns and contextual micro-interactions, the redesigned interface cut cognitive load significantly. User testing showed a 48% improvement in key metric discovery time and a notable drop in support requests related to data interpretation."
+                        data-url="https://example.com/beta">
                         <div class="project-content">
                             <h3>Project Beta</h3>
                             <p>Exploring new ways to organize and present information for better clarity.</p>
-                            <a href="#" class="link">View Case Study &rarr;</a>
+                            <span class="card-hint">Click to explore &rarr;</span>
                         </div>
                     </article>
                 </div>
@@ -103,10 +109,60 @@
         </section>
     </main>
 
+    <!-- Project floating overlay -->
+    <div id="project-backdrop" aria-hidden="true"></div>
+    <div id="project-overlay" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
+        <button id="overlay-close" aria-label="Close">&times;</button>
+        <p id="overlay-label">Project</p>
+        <h2 id="overlay-title"></h2>
+        <p id="overlay-desc"></p>
+        <a id="overlay-btn" href="#" target="_blank" rel="noopener" class="btn btn-project">Visit Project &rarr;</a>
+    </div>
+
     <footer>
         <div class="container">
             <p>&copy; 2026 Michał Spryszyński</p>
         </div>
     </footer>
+
+    <script>
+        const backdrop = document.getElementById('project-backdrop');
+        const overlay  = document.getElementById('project-overlay');
+        const oTitle   = document.getElementById('overlay-title');
+        const oDesc    = document.getElementById('overlay-desc');
+        const oBtn     = document.getElementById('overlay-btn');
+        const oClose   = document.getElementById('overlay-close');
+
+        function openProject(card) {
+            oTitle.textContent = card.dataset.title;
+            oDesc.textContent  = card.dataset.desc;
+            oBtn.href          = card.dataset.url;
+
+            backdrop.classList.add('visible');
+            overlay.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+            oClose.focus();
+        }
+
+        function closeProject() {
+            backdrop.classList.remove('visible');
+            overlay.classList.remove('visible');
+            document.body.style.overflow = '';
+        }
+
+        // Wire up cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', () => openProject(card));
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openProject(card); }
+            });
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
+        });
+
+        backdrop.addEventListener('click', closeProject);
+        oClose.addEventListener('click', closeProject);
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProject(); });
+    </script>
 </body>
 </html>
